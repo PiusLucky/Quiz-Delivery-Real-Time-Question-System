@@ -1,7 +1,25 @@
 # Quiz Delivery - Real-Time Question System
 
 A reliable real-time quiz question delivery system built with Next.js, Socket.IO, Express, TypeScript, and MongoDB.
-API DOC: http://localhost:3001/api-docs
+
+## Deployed
+
+| | URL |
+|---|-----|
+| **Frontend** | [https://quiz-delivery-real-time-question-sy.vercel.app/](https://quiz-delivery-real-time-question-sy.vercel.app/) |
+| **Backend** | [https://quiz-delivery-real-time-question-system.onrender.com/](https://quiz-delivery-real-time-question-system.onrender.com/) |
+| **API Docs** | [https://quiz-delivery-real-time-question-system.onrender.com/api-docs](https://quiz-delivery-real-time-question-system.onrender.com/api-docs) |
+
+### How to test the deployed app
+
+1. Open the [Frontend](https://quiz-delivery-real-time-question-sy.vercel.app/) in your browser.
+2. Click **Join Quiz** (leave client ID blank for auto-generated).
+3. Open the [Admin page](https://quiz-delivery-real-time-question-sy.vercel.app/admin) in a new tab and add questions.
+4. Questions appear in real time on the quiz client.
+5. Open a second tab with a different client ID to test multi-client behavior.
+6. Test reconnect: Go offline (DevTools → Network → Offline), then come back online — the client auto-reconnects and reconciles missed questions.
+
+```
 
 ## Features
 
