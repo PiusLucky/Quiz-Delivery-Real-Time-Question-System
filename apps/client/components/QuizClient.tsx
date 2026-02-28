@@ -1,25 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuizSocket } from "@/hooks/useQuizSocket";
+import { useToast } from "@/components/Toast";
 import { QuestionDisplay } from "./QuestionDisplay";
 
 export function QuizClient() {
   const [clientId, setClientId] = useState("");
   const [activeId, setActiveId] = useState<string | null>(null);
+  const { toast } = useToast();
+  const prevConnectedRef = useRef<boolean | null>(null);
 
-  const { questions, connected, gapWarning, reconcile } = useQuizSocket(
-    activeId || ""
-  );
+  const { questions, connected, gapWarning } = useQuizSocket(activeId || "");
+
+  useEffect(() => {
+    if (!activeId) return;
+    if (prevConnectedRef.current === null) {
+      prevConnectedRef.current = connected;
+      return;
+    }
+    if (prevConnectedRef.current !== connected) {
+      toast(
+        connected ? "Connected" : "Disconnected",
+        connected ? "success" : "error"
+      );
+      prevConnectedRef.current = connected;
+    }
+  }, [activeId, connected, toast]);
 
   const handleJoin = (e: React.FormEvent) => {
     e.preventDefault();
     const id = clientId.trim() || `client-${Date.now()}`;
     setActiveId(id);
-  };
-
-  const handleReconnect = () => {
-    if (activeId) reconcile();
   };
 
   if (!activeId) {
@@ -72,23 +84,6 @@ export function QuizClient() {
         <span>Client: {activeId}</span>
         <span style={{ color: "#666" }}>|</span>
         <span>Questions: {questions.length}</span>
-        {!connected && (
-          <button
-            onClick={handleReconnect}
-            style={{
-              marginLeft: "auto",
-              padding: "0.4rem 0.8rem",
-              background: "#6366f1",
-              border: "none",
-              borderRadius: "6px",
-              color: "white",
-              cursor: "pointer",
-              fontSize: "0.875rem",
-            }}
-          >
-            Reconcile
-          </button>
-        )}
       </div>
 
       {gapWarning && (

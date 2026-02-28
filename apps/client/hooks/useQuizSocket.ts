@@ -63,6 +63,17 @@ export function useQuizSocket(clientId: string) {
       setState((prev) => ({ ...prev, connected: false }));
     });
 
+    const handleOffline = () => {
+      setState((prev) => ({ ...prev, connected: false }));
+    };
+    const handleOnline = () => {
+      if (socketRef.current && !socketRef.current.connected) {
+        socketRef.current.connect();
+      }
+    };
+    window.addEventListener("offline", handleOffline);
+    window.addEventListener("online", handleOnline);
+
     socket.on("question", (payload: QuestionData) => {
       const { seq, text, options, correctAnswer } = payload;
       const expected = lastSeqRef.current + 1;
@@ -89,6 +100,8 @@ export function useQuizSocket(clientId: string) {
     });
 
     return () => {
+      window.removeEventListener("offline", handleOffline);
+      window.removeEventListener("online", handleOnline);
       socket.disconnect();
       socketRef.current = null;
     };

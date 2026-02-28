@@ -19,6 +19,8 @@ const io = new Server(httpServer, {
     origin: process.env.CLIENT_URL || "http://localhost:3000",
     methods: ["GET", "POST"],
   },
+  pingInterval: 5000,
+  pingTimeout: 3000,
 });
 ioRef.current = io;
 
