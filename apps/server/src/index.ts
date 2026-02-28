@@ -19,8 +19,8 @@ const io = new Server(httpServer, {
     origin: process.env.CLIENT_URL || "http://localhost:3000",
     methods: ["GET", "POST"],
   },
-  pingInterval: 5000,
-  pingTimeout: 3000,
+  pingInterval: 2000,
+  pingTimeout: 1500,
 });
 ioRef.current = io;
 
@@ -49,8 +49,12 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("disconnect", () => {
-    console.log(`Client ${clientId} disconnected`);
+  socket.on("disconnect", (reason) => {
+    try {
+      console.log(`Client ${clientId} disconnected (${reason})`);
+    } catch {
+      // Ensure disconnect handler never throws - would not affect other clients
+    }
   });
 });
 

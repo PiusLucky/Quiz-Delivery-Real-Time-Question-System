@@ -81,6 +81,11 @@ body {
   animation: pulse 2s infinite;
 }
 
+.status-dot.connecting {
+  background: var(--warning);
+  animation: pulse 1s infinite;
+}
+
 .status-dot.disconnected {
   background: #ef4444;
   animation: none;

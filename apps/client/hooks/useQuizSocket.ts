@@ -11,10 +11,13 @@ export interface QuestionData {
   correctAnswer?: string;
 }
 
+export type ConnectionStatus = "connecting" | "connected" | "disconnected";
+
 export interface QuizState {
   questions: QuestionData[];
   lastSeq: number;
   connected: boolean;
+  connectionStatus: ConnectionStatus;
   clientId: string;
   gapWarning: string | null;
 }
@@ -24,6 +27,7 @@ export function useQuizSocket(clientId: string) {
     questions: [],
     lastSeq: 0,
     connected: false,
+    connectionStatus: (clientId ? "connecting" : "disconnected") as ConnectionStatus,
     clientId,
     gapWarning: null,
   });
@@ -51,27 +55,25 @@ export function useQuizSocket(clientId: string) {
   useEffect(() => {
     if (!clientId) return;
 
+    setState((prev) => ({ ...prev, connectionStatus: "connecting" }));
     const socket = createSocket(clientId);
     socketRef.current = socket;
 
     socket.on("connect", () => {
-      setState((prev) => ({ ...prev, connected: true }));
+      setState((prev) => ({ ...prev, connected: true, connectionStatus: "connected" }));
       reconcile();
     });
 
     socket.on("disconnect", () => {
-      setState((prev) => ({ ...prev, connected: false }));
+      setState((prev) => ({ ...prev, connected: false, connectionStatus: "disconnected" }));
     });
 
-    const handleOffline = () => {
-      setState((prev) => ({ ...prev, connected: false }));
-    };
     const handleOnline = () => {
       if (socketRef.current && !socketRef.current.connected) {
+        setState((prev) => ({ ...prev, connectionStatus: "connecting" }));
         socketRef.current.connect();
       }
     };
-    window.addEventListener("offline", handleOffline);
     window.addEventListener("online", handleOnline);
 
     socket.on("question", (payload: QuestionData) => {
@@ -100,7 +102,6 @@ export function useQuizSocket(clientId: string) {
     });
 
     return () => {
-      window.removeEventListener("offline", handleOffline);
       window.removeEventListener("online", handleOnline);
       socket.disconnect();
       socketRef.current = null;

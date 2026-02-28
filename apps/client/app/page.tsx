@@ -10,7 +10,7 @@ export default function Home() {
         Real-time question delivery with sequence tracking and reconciliation
       </p>
       <p style={{ marginBottom: "2rem" }}>
-        <a href="/admin" style={{ color: "#6366f1" }}>Add questions (Admin) →</a>
+        <a href="/admin" target="_blank" rel="noopener noreferrer" style={{ color: "#6366f1" }}>Add questions (Admin) →</a>
       </p>
       <QuizClient />
     </main>

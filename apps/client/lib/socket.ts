@@ -10,6 +10,7 @@ export function createSocket(clientId: string): Socket {
     reconnectionAttempts: 10,
     reconnectionDelay: 1000,
     reconnectionDelayMax: 5000,
+    forceNew: true,
   });
 }
 
