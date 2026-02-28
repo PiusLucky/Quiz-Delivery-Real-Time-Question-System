@@ -6,8 +6,8 @@
   ],
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/src"
+      "source": "/src/(.*)",
+      "destination": "/"
     }
   ]
 }
