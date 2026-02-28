@@ -17,7 +17,7 @@ A reliable real-time quiz question delivery system built with Next.js, Socket.IO
 3. Open the [Admin page](https://quiz-delivery-real-time-question-sy.vercel.app/admin) in a new tab and add questions.
 4. Questions appear in real time on the quiz client.
 5. Open a second tab with a different client ID to test multi-client behavior.
-6. Test reconnect: Go offline (DevTools → Network → Offline), then come back online — the client auto-reconnects and reconciles missed questions.
+6. Test reconnect: use **Simulate offline** (disconnects only that client). Other clients stay connected. Click **Reconnect** or wait for auto-reconnect — the client reconciles missed questions.
 
 ```
 

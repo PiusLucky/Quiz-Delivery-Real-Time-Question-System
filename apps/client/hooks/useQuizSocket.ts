@@ -108,5 +108,16 @@ export function useQuizSocket(clientId: string) {
     };
   }, [clientId, reconcile]);
 
-  return { ...state, reconcile };
+  const disconnect = useCallback(() => {
+    socketRef.current?.disconnect();
+  }, []);
+
+  const connect = useCallback(() => {
+    if (socketRef.current && !socketRef.current.connected) {
+      setState((prev) => ({ ...prev, connectionStatus: "connecting" }));
+      socketRef.current.connect();
+    }
+  }, []);
+
+  return { ...state, reconcile, disconnect, connect };
 }

@@ -8,7 +8,7 @@ import { QuestionDisplay } from "./QuestionDisplay";
 function QuizView({ activeId }: { activeId: string }) {
   const { toast } = useToast();
   const prevConnectedRef = useRef<boolean | null>(null);
-  const { questions, connected, connectionStatus, gapWarning } = useQuizSocket(activeId);
+  const { questions, connected, connectionStatus, gapWarning, disconnect, connect } = useQuizSocket(activeId);
 
   useEffect(() => {
     if (prevConnectedRef.current === null) {
@@ -42,6 +42,42 @@ function QuizView({ activeId }: { activeId: string }) {
         <span>Client: {activeId}</span>
         <span style={{ color: "#666" }}>|</span>
         <span>Questions: {questions.length}</span>
+        <span style={{ marginLeft: "auto", display: "flex", gap: "0.5rem" }}>
+          {connectionStatus === "connected" ? (
+            <button
+              type="button"
+              onClick={disconnect}
+              style={{
+                padding: "0.4rem 0.8rem",
+                background: "transparent",
+                border: "1px solid var(--warning)",
+                borderRadius: "6px",
+                color: "var(--warning)",
+                cursor: "pointer",
+                fontSize: "0.875rem",
+              }}
+              title="Simulate offline (disconnects only this client)"
+            >
+              Simulate offline
+            </button>
+          ) : connectionStatus === "disconnected" ? (
+            <button
+              type="button"
+              onClick={connect}
+              style={{
+                padding: "0.4rem 0.8rem",
+                background: "var(--success)",
+                border: "none",
+                borderRadius: "6px",
+                color: "#fff",
+                cursor: "pointer",
+                fontSize: "0.875rem",
+              }}
+            >
+              Reconnect
+            </button>
+          ) : null}
+        </span>
       </div>
 
       {gapWarning && (
