@@ -44,25 +44,15 @@ class QuizSessionService {
   }
 
   async recordAck(clientId: string, seq: number): Promise<void> {
-    let clientAck = await ClientAck.findOne({ clientId });
-
-    if (!clientAck) {
-      clientAck = await ClientAck.create({
-        clientId,
-        ackedSeqs: [seq],
-        lastSeq: seq,
-      });
-    } else {
-      if (!clientAck.ackedSeqs.includes(seq)) {
-        clientAck.ackedSeqs.push(seq);
-        clientAck.ackedSeqs.sort((a, b) => a - b);
-      }
-      if (seq > clientAck.lastSeq) {
-        clientAck.lastSeq = seq;
-      }
-      clientAck.updatedAt = new Date();
-      await clientAck.save();
-    }
+    await ClientAck.findOneAndUpdate(
+      { clientId },
+      {
+        $addToSet: { ackedSeqs: seq },
+        $max: { lastSeq: seq },
+        $set: { updatedAt: new Date() },
+      },
+      { upsert: true }
+    );
   }
 
   async getClientAck(clientId: string): Promise<IClientAck | null> {
