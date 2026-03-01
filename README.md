@@ -2,6 +2,9 @@
 
 A reliable real-time quiz question delivery system built with Next.js, Socket.IO, Express, TypeScript, and MongoDB.
 
+## SOLUTION DEMO youtube video
+https://youtu.be/_Muy1LWlbaw
+
 ## Deployed
 
 | | URL |
